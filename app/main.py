@@ -15,26 +15,116 @@ model = SentenceTransformer("all-MiniLM-L6-v2")
 
 
 SKILLS = [
+    # Programming languages
     "python",
     "java",
     "javascript",
+    "typescript",
+    "c",
+    "c++",
+    "c#",
+    "go",
+    "r",
+
+    # Databases and querying
     "sql",
     "mysql",
     "postgresql",
     "mongodb",
+    "sqlite",
+    "redis",
+    "database design",
+
+    # Backend and APIs
     "fastapi",
+    "flask",
+    "django",
     "streamlit",
-    "pandas",
-    "openpyxl",
-    "docker",
-    "machine learning",
-    "aws",
-    "git",
-    "react",
     "rest api",
+    "graphql",
+    "microservices",
+
+    # Data analysis and engineering
+    "pandas",
+    "numpy",
+    "openpyxl",
     "etl",
-    "power bi"
+    "data analysis",
+    "data visualization",
+    "data cleaning",
+    "data engineering",
+    "excel",
+    "power bi",
+    "tableau",
+    "apache spark",
+    "apache kafka",
+    "airflow",
+
+    # Machine learning and AI
+    "machine learning",
+    "deep learning",
+    "scikit-learn",
+    "tensorflow",
+    "pytorch",
+    "keras",
+    "natural language processing",
+    "computer vision",
+    "generative ai",
+    "large language models",
+    "prompt engineering",
+    "retrieval augmented generation",
+    "langchain",
+    "hugging face",
+    "vector databases",
+    "chromadb",
+    "faiss",
+    "openai api",
+    "azure openai",
+    "yolo",
+
+    # Cloud and DevOps
+    "aws",
+    "azure",
+    "google cloud",
+    "docker",
+    "kubernetes",
+    "jenkins",
+    "git",
+    "github",
+    "linux",
+    "ci/cd",
+
+    # Frontend and web
+    "html",
+    "css",
+    "react",
+    "next.js",
+
+    # Testing and development practices
+    "pytest",
+    "unit testing",
+    "integration testing",
+    "object-oriented programming",
+    "data structures",
+    "algorithms",
+    "agile",
 ]
+
+
+SKILL_ALIASES = {
+    "sklearn": "scikit-learn",
+    "scikit learn": "scikit-learn",
+    "restful api": "rest api",
+    "restful apis": "rest api",
+    "rest apis": "rest api",
+    "retrieval-augmented generation": "retrieval augmented generation",
+    "rag pipeline": "retrieval augmented generation",
+    "powerbi": "power bi",
+    "ci cd": "ci/cd",
+    "large language model": "large language models",
+    "llms": "large language models",
+    "postgres": "postgresql",
+}
 
 
 SKILL_RECOMMENDATIONS = {
@@ -59,17 +149,24 @@ SKILL_RECOMMENDATIONS = {
     "java": "Review OOP, collections, exception handling, and data structures."
 }
 
+
 def extract_skills(text):
-    found_skills = []
     text = text.lower()
+    found_skills = set()
 
     for skill in SKILLS:
-        pattern = rf"\b{re.escape(skill.lower())}\b"
+        pattern = rf"(?<!\w){re.escape(skill.lower())}(?!\w)"
 
         if re.search(pattern, text):
-            found_skills.append(skill)
+            found_skills.add(skill)
 
-    return found_skills
+    for alias, canonical_skill in SKILL_ALIASES.items():
+        pattern = rf"(?<!\w){re.escape(alias)}(?!\w)"
+
+        if re.search(pattern, text):
+            found_skills.add(canonical_skill)
+
+    return sorted(found_skills)
 
 
 def compare_skills(resume_skills, job_skills):
