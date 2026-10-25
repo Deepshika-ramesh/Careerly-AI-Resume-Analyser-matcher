@@ -1,0 +1,736 @@
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Careerly | AI Resume Intelligence</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+:root {
+    color-scheme: dark;
+    --bg: #0b0d12;
+    --card: #141821;
+    --ink: #eef0f8;
+    --muted: #9299ad;
+    --purple: #a78bfa;
+    --purple-light: #211b35;
+    --border: #272d3b;
+    --green: #6ee7b7;
+    --red: #fda4af;
+    --input: #0e1118;
+    --shadow: 0 12px 36px rgba(0,0,0,.16);
+}
+html[data-theme="light"] {
+    color-scheme: light;
+    --bg: #f4f5fa;
+    --card: #ffffff;
+    --ink: #202238;
+    --muted: #777b91;
+    --purple: #7155d9;
+    --purple-light: #f0ecff;
+    --border: #e5e6ef;
+    --green: #21795e;
+    --red: #b53e5b;
+    --input: #fbfbfe;
+    --shadow: 0 12px 36px rgba(46,35,91,.06);
+}
+* { box-sizing: border-box; }
+body {
+    min-height: 100vh;
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    transition: background .2s, color .2s;
+}
+button, textarea, input { font: inherit; }
+.navbar {
+    min-height: 76px;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 7%;
+}
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    font: 800 21px 'Manrope', sans-serif;
+}
+.logo {
+    width: 39px;
+    height: 39px;
+    flex-shrink: 0;
+    border-radius: 13px;
+    display: grid;
+    place-items: center;
+    color: white;
+    background: linear-gradient(135deg,#9d89ff,#6c55d9);
+    font-size: 21px;
+}
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.nav-tag {
+    color: var(--purple);
+    background: var(--purple-light);
+    border: 1px solid var(--border);
+    border-radius: 30px;
+    padding: 8px 13px;
+    font-size: 12px;
+    font-weight: 700;
+}
+.theme-toggle {
+    padding: 9px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    background: var(--card);
+    color: var(--ink);
+    border: 1px solid var(--border);
+}
+.theme-toggle:hover { border-color: var(--purple); }
+main {
+    max-width: 1160px;
+    margin: auto;
+    padding: 52px 24px 70px;
+}
+.hero {
+    text-align: center;
+    margin-bottom: 37px;
+}
+.eyebrow {
+    display: inline-block;
+    padding: 8px 13px;
+    border: 1px solid var(--border);
+    background: var(--purple-light);
+    color: var(--purple);
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .4px;
+}
+h1 {
+    font: 800 clamp(32px,5vw,48px)/1.17 'Manrope',sans-serif;
+    letter-spacing: -1.8px;
+    margin: 19px 0 13px;
+}
+.gradient {
+    background: linear-gradient(100deg,#b8a4ff,#8b78f0);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+html[data-theme="light"] .gradient {
+    background-image: linear-gradient(100deg,#9b79f5,#6e58d7);
+}
+.hero p {
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 540px;
+    margin: auto;
+    font-size: 15px;
+}
+.workspace {
+    display: grid;
+    grid-template-columns: minmax(0,.9fr) minmax(0,1.1fr);
+    gap: 22px;
+    align-items: stretch;
+}
+.card {
+    min-width: 0;
+    background: var(--card);
+    color: var(--ink);
+    border: 1px solid var(--border);
+    border-radius: 21px;
+    padding: 25px;
+    box-shadow: var(--shadow);
+}
+.card-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 23px;
+}
+.heading-icon {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    border-radius: 13px;
+    background: var(--purple-light);
+    color: var(--purple);
+    display: grid;
+    place-items: center;
+    font-size: 20px;
+}
+h2 {
+    color: var(--ink);
+    font: 700 17px 'Manrope',sans-serif;
+    margin: 0 0 4px;
+}
+.subheading {
+    color: var(--muted);
+    font-size: 12px;
+    overflow-wrap: anywhere;
+}
+.field-label {
+    display: block;
+    color: var(--ink);
+    font-weight: 700;
+    font-size: 13px;
+    margin: 19px 0 10px;
+}
+.upload {
+    display: block;
+    width: 100%;
+    border: 1.5px dashed var(--purple);
+    background: var(--input);
+    color: var(--ink);
+    border-radius: 15px;
+    padding: 24px 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: background .2s,border-color .2s;
+}
+.upload:hover, .upload.dragover {
+    background: var(--purple-light);
+    border-color: var(--purple);
+}
+.upload-icon {
+    color: var(--purple);
+    font-size: 29px;
+    margin-bottom: 9px;
+}
+.upload strong {
+    display: block;
+    color: var(--ink);
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+.upload small {
+    display: block;
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 7px;
+}
+textarea {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    min-height: 195px;
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    padding: 14px;
+    background: var(--input);
+    color: var(--ink);
+    resize: vertical;
+    outline: none;
+    line-height: 1.65;
+    font-size: 13px;
+}
+textarea::placeholder { color: var(--muted); opacity: .85; }
+textarea:focus {
+    border-color: var(--purple);
+    box-shadow: 0 0 0 3px var(--purple-light);
+}
+.primary-btn {
+    width: 100%;
+    margin-top: 19px;
+    padding: 15px;
+    color: white;
+    border: 0;
+    border-radius: 13px;
+    cursor: pointer;
+    background: linear-gradient(110deg,#8d76ef,#6b55d5);
+    box-shadow: 0 7px 16px rgba(121,99,232,.18);
+    font-weight: 700;
+    transition: transform .2s,opacity .2s;
+}
+.primary-btn:hover { transform: translateY(-1px); }
+.primary-btn:disabled {
+    opacity: .65;
+    cursor: wait;
+    transform: none;
+}
+.privacy {
+    text-align: center;
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-top: 13px;
+}
+.error {
+    color: var(--red);
+    background: var(--input);
+    border: 1px solid var(--border);
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 13px;
+    line-height: 1.5;
+    margin-top: 14px;
+    display: none;
+    overflow-wrap: anywhere;
+}
+.results-placeholder {
+    min-height: 440px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px;
+}
+.placeholder-art {
+    width: 100px;
+    height: 100px;
+    background: var(--purple-light);
+    color: var(--purple);
+    border: 1px solid var(--border);
+    border-radius: 31px;
+    display: grid;
+    place-items: center;
+    font-size: 43px;
+    margin-bottom: 24px;
+}
+.results-placeholder h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+.results-placeholder p {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.7;
+    max-width: 280px;
+    margin: 0;
+}
+#results { display: none; }
+.score-grid {
+    display: grid;
+    grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+    gap: 13px;
+    margin-bottom: 22px;
+}
+.score-card {
+    min-width: 0;
+    background: var(--input);
+    color: var(--ink);
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    padding: 17px;
+}
+.score-label {
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.5;
+}
+.score-number {
+    color: var(--ink);
+    font: 800 30px 'Manrope',sans-serif;
+    letter-spacing: -1px;
+    margin: 7px 0 11px;
+    overflow-wrap: anywhere;
+}
+.progress {
+    height: 6px;
+    border-radius: 10px;
+    background: var(--border);
+    overflow: hidden;
+}
+.progress-fill {
+    height: 100%;
+    width: 0;
+    border-radius: 10px;
+    background: linear-gradient(90deg,#a08bff,#7058dc);
+    transition: width .6s ease;
+}
+.section-title {
+    color: var(--ink);
+    font: 700 14px 'Manrope',sans-serif;
+    margin: 23px 0 12px;
+}
+.skill-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.chip {
+    border-radius: 9px;
+    padding: 8px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+    border: 1px solid var(--border);
+}
+.chip.good {
+    background: var(--purple-light);
+    color: var(--green);
+}
+.chip.missing {
+    background: var(--input);
+    color: var(--red);
+}
+.recommendation {
+    background: var(--input);
+    color: var(--ink);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 13px;
+    margin-bottom: 9px;
+}
+.rec-name {
+    color: var(--ink);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: capitalize;
+    margin-bottom: 6px;
+    overflow-wrap: anywhere;
+}
+.rec-text {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+.note {
+    margin-top: 20px;
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.6;
+}
+.footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 30px;
+}
+@media (max-width: 760px) {
+    .navbar { padding: 13px 18px; min-height: 66px; }
+    main { padding: 35px 15px 50px; }
+    .workspace { grid-template-columns: minmax(0,1fr); }
+    .hero { margin-bottom: 28px; }
+    .card { padding: 20px; }
+    .results-placeholder { min-height: 270px; }
+}
+@media (max-width: 420px) {
+    .nav-tag { display: none; }
+    .brand { font-size: 19px; }
+    .theme-toggle { padding: 8px 9px; font-size: 12px; }
+    .score-grid { grid-template-columns: minmax(0,1fr); }
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; }
+}
+</style>
+</head>
+<body>
+<header class="navbar">
+    <div class="brand">
+        <div class="logo">✳</div>
+        Careerly
+    </div>
+    <div class="nav-actions">
+        <div class="nav-tag">✦ AI-POWERED</div>
+        <button id="themeToggle" class="theme-toggle" type="button">☼ Light mode</button>
+    </div>
+</header>
+
+<main>
+    <section class="hero">
+        <span class="eyebrow">YOUR NEXT OPPORTUNITY STARTS HERE</span>
+        <h1>Your resume, <span class="gradient">understood.</span></h1>
+        <p>Discover how your experience aligns with your dream role.
+        Find skill gaps and get practical next steps to level up.</p>
+    </section>
+
+    <section class="workspace">
+        <div class="card">
+            <div class="card-heading">
+                <div class="heading-icon">📄</div>
+                <div>
+                    <h2>Let's get started</h2>
+                    <div class="subheading">Add your resume and target role</div>
+                </div>
+            </div>
+
+            <form id="analysisForm">
+                <label class="field-label" for="resumeFile">Your resume</label>
+                <label class="upload" id="dropZone" for="resumeFile">
+                    <div class="upload-icon">☁️</div>
+                    <strong id="fileName">Drop your PDF here or browse</strong>
+                    <small>PDF format · Select one resume</small>
+                </label>
+                <input id="resumeFile" type="file" accept=".pdf,application/pdf" required hidden>
+
+                <label class="field-label" for="jobDescription">Job description</label>
+                <textarea id="jobDescription" required
+                    placeholder="Paste the job description here...
+
+Include the responsibilities, required skills and qualifications for the most useful comparison."></textarea>
+
+                <button class="primary-btn" id="analyzeBtn" type="submit">✨ Analyze my resume</button>
+                <div class="error" id="errorMessage" role="alert"></div>
+                <div class="privacy">🔒 Your resume is sent to your running local API.</div>
+            </form>
+        </div>
+
+        <div class="card">
+            <div id="placeholder" class="results-placeholder">
+                <div class="placeholder-art">✧</div>
+                <h2>Your insights live here</h2>
+                <p>Upload your resume and add a job description.
+                Your personalized analysis will appear in this space.</p>
+            </div>
+
+            <div id="results">
+                <div class="card-heading">
+                    <div class="heading-icon">📊</div>
+                    <div>
+                        <h2>Your match report</h2>
+                        <div class="subheading" id="reportFilename"></div>
+                    </div>
+                </div>
+
+                <div class="score-grid">
+                    <div class="score-card">
+                        <div class="score-label">Keyword skill overlap</div>
+                        <div class="score-number" id="keywordScore">—</div>
+                        <div class="progress"><div class="progress-fill" id="keywordBar"></div></div>
+                    </div>
+                    <div class="score-card">
+                        <div class="score-label">Semantic similarity</div>
+                        <div class="score-number" id="semanticScore">—</div>
+                        <div class="progress"><div class="progress-fill" id="semanticBar"></div></div>
+                    </div>
+                </div>
+
+                <div class="section-title">✓ Matched skills</div>
+                <div class="skill-list" id="matchedSkills"></div>
+
+                <div class="section-title">↗ Skills to work on</div>
+                <div class="skill-list" id="missingSkills"></div>
+
+                <div class="section-title">✦ Your recommended next steps</div>
+                <div id="recommendations"></div>
+
+                <div class="note">
+                    These scores are indicators, not hiring probabilities or verified ATS scores.
+                    Recommendations identify skills to develop or clarify if you already have relevant experience.
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="footer">Made with curiosity✦</div>
+</main>
+
+<script>
+const form = document.getElementById("analysisForm");
+const fileInput = document.getElementById("resumeFile");
+const fileName = document.getElementById("fileName");
+const dropZone = document.getElementById("dropZone");
+const analyzeBtn = document.getElementById("analyzeBtn");
+const errorMessage = document.getElementById("errorMessage");
+const themeToggle = document.getElementById("themeToggle");
+
+fileInput.addEventListener("change", () => {
+    const file = fileInput.files[0];
+    fileName.textContent = file ? file.name : "Drop your PDF here or browse";
+    errorMessage.style.display = "none";
+});
+
+["dragenter", "dragover"].forEach(eventName => {
+    dropZone.addEventListener(eventName, event => {
+        event.preventDefault();
+        dropZone.classList.add("dragover");
+    });
+});
+
+["dragleave", "drop"].forEach(eventName => {
+    dropZone.addEventListener(eventName, event => {
+        event.preventDefault();
+        dropZone.classList.remove("dragover");
+    });
+});
+
+dropZone.addEventListener("drop", event => {
+    const file = event.dataTransfer.files[0];
+    if (!file) return;
+
+    if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
+        showError("Please select a PDF file.");
+        return;
+    }
+
+    const transfer = new DataTransfer();
+    transfer.items.add(file);
+    fileInput.files = transfer.files;
+    fileName.textContent = file.name;
+    errorMessage.style.display = "none";
+});
+
+function showError(message) {
+    errorMessage.textContent = message;
+    errorMessage.style.display = "block";
+}
+
+function renderChips(containerId, skills, className, emptyMessage) {
+    const container = document.getElementById(containerId);
+    container.replaceChildren();
+
+    if (!skills || skills.length === 0) {
+        const empty = document.createElement("span");
+        empty.className = "subheading";
+        empty.textContent = emptyMessage;
+        container.appendChild(empty);
+        return;
+    }
+
+    skills.forEach(skill => {
+        const chip = document.createElement("span");
+        chip.className = `chip ${className}`;
+        chip.textContent = skill;
+        container.appendChild(chip);
+    });
+}
+
+function renderRecommendations(items) {
+    const container = document.getElementById("recommendations");
+    container.replaceChildren();
+
+    if (!items || items.length === 0) {
+        const message = document.createElement("div");
+        message.className = "rec-text";
+        message.textContent = "No detected skill gaps for this job description.";
+        container.appendChild(message);
+        return;
+    }
+
+    items.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "recommendation";
+
+        const name = document.createElement("div");
+        name.className = "rec-name";
+        name.textContent = "✦ " + item.skill;
+
+        const description = document.createElement("div");
+        description.className = "rec-text";
+        description.textContent = item.recommendation;
+
+        card.append(name, description);
+        container.appendChild(card);
+    });
+}
+
+function setScore(numberId, barId, value) {
+    const score = Number(value);
+
+    if (!Number.isFinite(score)) {
+        document.getElementById(numberId).textContent = "N/A";
+        document.getElementById(barId).style.width = "0%";
+        return;
+    }
+
+    document.getElementById(numberId).textContent = score.toFixed(2) + "%";
+    document.getElementById(barId).style.width =
+        Math.max(0, Math.min(100, score)) + "%";
+}
+
+form.addEventListener("submit", async event => {
+    event.preventDefault();
+    errorMessage.style.display = "none";
+
+    const file = fileInput.files[0];
+    const jobDescription = document.getElementById("jobDescription").value.trim();
+
+    if (!file) {
+        showError("Please upload your resume PDF.");
+        return;
+    }
+    if (!file.name.toLowerCase().endsWith(".pdf")) {
+        showError("Please upload a PDF file.");
+        return;
+    }
+    if (!jobDescription) {
+        showError("Please paste a job description.");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("resume", file);
+    formData.append("job_description", jobDescription);
+
+    analyzeBtn.disabled = true;
+    analyzeBtn.textContent = "Analyzing your resume...";
+
+    try {
+        const response = await fetch("/match", {
+            method: "POST",
+            body: formData
+        });
+
+        if (!response.ok) {
+            const detail = await response.text();
+            throw new Error(`API error (${response.status}): ${detail.slice(0, 300)}`);
+        }
+
+        const data = await response.json();
+
+        document.getElementById("reportFilename").textContent =
+            data.resume_filename || file.name;
+
+        setScore("keywordScore", "keywordBar", data.match_percentage);
+        setScore("semanticScore", "semanticBar", data.semantic_similarity);
+
+        renderChips("matchedSkills", data.matched_skills, "good",
+            "No matching skills detected.");
+        renderChips("missingSkills", data.missing_skills, "missing",
+            "No missing skills detected.");
+        renderRecommendations(data.recommendations);
+
+        document.getElementById("placeholder").style.display = "none";
+        document.getElementById("results").style.display = "block";
+    } catch (error) {
+        showError(
+            "Couldn't analyze your resume. Make sure the FastAPI server is running. " +
+            error.message
+        );
+    } finally {
+        analyzeBtn.disabled = false;
+        analyzeBtn.textContent = "✨ Analyze my resume";
+    }
+});
+
+function applyTheme(theme) {
+    document.documentElement.dataset.theme = theme;
+    const isDark = theme === "dark";
+    themeToggle.textContent = isDark ? "☼ Light mode" : "☾ Dark mode";
+
+    try {
+        localStorage.setItem("careerly-theme", theme);
+    } catch (error) {
+        // Theme switching still works if browser storage is unavailable.
+    }
+}
+
+let savedTheme = "dark";
+try {
+    savedTheme = localStorage.getItem("careerly-theme") || "dark";
+} catch (error) {
+    // Default to dark mode when storage is unavailable.
+}
+applyTheme(savedTheme);
+
+themeToggle.addEventListener("click", () => {
+    const currentTheme = document.documentElement.dataset.theme;
+    applyTheme(currentTheme === "dark" ? "light" : "dark");
+});
+</script>
+</body>
+</html>
