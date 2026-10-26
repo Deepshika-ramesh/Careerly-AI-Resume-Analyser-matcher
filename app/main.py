@@ -1,7 +1,6 @@
 from fastapi import FastAPI, UploadFile, File, Form
 from pypdf import PdfReader
 import re
-from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 from fastapi.staticfiles import StaticFiles
 
@@ -11,7 +10,7 @@ app.mount(
     StaticFiles(directory="frontend", html=True),
     name="ui"
 )
-model = SentenceTransformer("all-MiniLM-L6-v2")
+model = None
 
 
 SKILLS = [
@@ -209,11 +208,19 @@ def generate_recommendations(missing_skills):
 
 
 def calculate_semantic_similarity(resume_text, job_description):
+    global model
+
+    if model is None:
+        from sentence_transformers import SentenceTransformer
+        model = SentenceTransformer("all-MiniLM-L6-v2")
+
+    # Keep the rest of your existing function below this point.
+    
     embeddings = model.encode([
         resume_text,
         job_description
+        
     ])
-
     similarity = cosine_similarity(
         [embeddings[0]],
         [embeddings[1]]
