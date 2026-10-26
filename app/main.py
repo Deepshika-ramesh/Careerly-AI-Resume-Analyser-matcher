@@ -207,26 +207,28 @@ def generate_recommendations(missing_skills):
     return recommendations
 
 
+
 def calculate_semantic_similarity(resume_text, job_description):
-    global model
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.metrics.pairwise import cosine_similarity
 
-    if model is None:
-        from sentence_transformers import SentenceTransformer
-        model = SentenceTransformer("all-MiniLM-L6-v2")
+    vectorizer = TfidfVectorizer(stop_words="english")
 
-    # Keep the rest of your existing function below this point.
-    
-    embeddings = model.encode([
-        resume_text,
-        job_description
-        
-    ])
-    similarity = cosine_similarity(
-        [embeddings[0]],
-        [embeddings[1]]
-    )[0][0]
+    try:
+        vectors = vectorizer.fit_transform([
+            resume_text,
+            job_description
+        ])
 
-    return round(float(similarity) * 100, 2)
+        similarity = cosine_similarity(
+            vectors[0:1],
+            vectors[1:2]
+        )[0][0]
+
+        return round(float(similarity) * 100, 2)
+
+    except ValueError:
+        return 0.0
 
 @app.get("/")
 def home():
